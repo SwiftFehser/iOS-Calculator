@@ -1,0 +1,105 @@
+enum Operation:String {
+    case Add = "+"
+    case Subtract = "-"
+    case Divide = "/"
+    case Multiply = "*"
+    case NULL = "Empty"
+}
+class ViewController: UIViewController {
+
+    
+@IBOutlet weak var outputLabel: UILabel!
+    var runningNumber = ""
+    var leftValue = ""
+    var rightValue = ""
+    var result = ""
+    var currentOperation: Operation = .NULL
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        outputLabel.text = "0"
+        
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @IBAction func numberPressed(_ sender: RoundButoon) {
+        if runningNumber.count <= 8 {
+            runningNumber += "\(sender.tag)"
+            outputLabel.text = runningNumber
+        }
+    }
+    
+    @IBAction func allClearPressed(_ sender: RoundButoon) {
+        runningNumber = ""
+        leftValue = ""
+        rightValue  = ""
+        result = ""
+        currentOperation = .NULL
+        outputLabel.text = "0"
+    }
+    
+    @IBAction func dotPressed(_ sender: RoundButoon) {
+        if runningNumber.count <= 7 {
+            runningNumber += "."
+            outputLabel.text = runningNumber
+        }
+    }
+    
+    @IBAction func equalPressed(_ sender: RoundButoon) {
+        operation(operation: currentOperation)
+    }
+    
+    @IBAction func addPressed(_ sender: RoundButoon) {
+        operation(operation: .Add)
+    }
+    
+    @IBAction func subPressed(_ sender: RoundButoon) {
+        operation(operation: .Subtract)
+    }
+    
+    @IBAction func multiplyPressed(_ sender: RoundButoon) {
+        operation(operation: .Multiply)
+    }
+    
+    @IBAction func divPressed(_ sender: RoundButoon) {
+        operation(operation: .Divide)
+    }
+    
+    func operation(operation: Operation) {
+        if  currentOperation != .NULL {
+            if runningNumber != "" {
+                rightValue = runningNumber
+                runningNumber = ""
+                
+                if currentOperation == .Add {
+                    result = "\(Double(leftValue)! + Double(rightValue)!)"
+                    
+                }else if currentOperation == .Subtract{
+                    
+                    result = "\(Double(leftValue)! - Double(rightValue)!)"
+                }else if currentOperation == .Multiply{
+                    
+                    result = "\(Double(leftValue)! * Double(rightValue)!)"
+                }else if currentOperation == .Divide{
+                    
+                    result = "\(Double(leftValue)! / Double(rightValue)!)"
+                }
+                leftValue = result
+                outputLabel.text = result
+            }
+            currentOperation = operation
+            
+        }else{
+            leftValue = runningNumber
+            runningNumber = ""
+            currentOperation = operation
+        }
+        
+    }
+}
